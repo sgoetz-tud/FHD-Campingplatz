@@ -27,18 +27,27 @@
         return null;
     }
 
+    public int Abrechnen(Buchung b)
+    {
+        int days = (b.Abreise - b.Anreise).Days;
+        return days * b.Stellplatz.Preis;
+    }
+
     static void Main()
     {
         Campingplatz cp = new Campingplatz();
         Kunde kunde = new Kunde();
         Buchung b = kunde.buchen(cp, DateTime.Parse("01.07.2022"), DateTime.Parse("10.07.2022"), 303);
 
-        Console.WriteLine((b.Abreise - b.Anreise).Days+" Tage");
+        int preis = cp.Abrechnen(b);
+        
+        Console.WriteLine("Gesamtkosten: "+preis);
     }
 }
 
 abstract class Stellplatz
 {
+    public int Preis { get; set; }
     public int Nummer { get; set; }
 
     public Stellplatz(int nummer)
@@ -50,28 +59,25 @@ abstract class Stellplatz
 
 class Premiumstellplatz : Stellplatz
 {
-    static int preis = 40;
-
     public Premiumstellplatz(int nummer) : base(nummer)
     {
+        Preis = 40;
     }
 }
 
 class Standardstellplatz : Stellplatz
 {
-    static int preis = 30;
-
     public Standardstellplatz(int nummer) : base(nummer)
     {
+        Preis = 30;
     }
 }
 
 class Zeltparzelle : Stellplatz
 {
-    static int preis = 20;
-
     public Zeltparzelle(int nummer) : base(nummer)
     {
+        Preis = 20;
     }
 }
 
