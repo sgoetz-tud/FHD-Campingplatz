@@ -115,6 +115,9 @@ class Zeltparzelle : Stellplatz
     }
 }
 
+/// <summary>
+/// Fasst eine Buchung eines Kundes zusammen
+/// </summary>
 class Buchung
 {
     public DateTime Anreise { get; set; }
