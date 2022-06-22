@@ -41,6 +41,11 @@
             preis += p.Preis;
         }
 
+        foreach(Ausleihe a in b.GetAusleihen())
+        {
+            preis += (a.Ende - a.Start).Days * a.PreisProTag;
+        }
+
         return preis;
     }
 
@@ -57,6 +62,10 @@
                 kunde.KaufeProdukt(p, 303);
             }
         }
+
+        Fahrrad f = cp.Shop.GetFahrräder().First();
+        Ausleihe a = new Ausleihe(DateTime.Parse("02.07.2022"), DateTime.Parse("05.07.2022"), f);
+        b.NeueAusleihe(a);
 
         double preis = cp.Abrechnen(b);
         
@@ -107,12 +116,15 @@ class Buchung
     public Stellplatz Stellplatz { get; set; }
     
     private List<Produkt> gekaufteProdukte;
+    private List<Ausleihe> ausleihen;
+
     public Buchung(DateTime anreise, DateTime abreise, Stellplatz sp)
     {
         Anreise = anreise;
         Abreise = abreise;
         Stellplatz = sp;
         gekaufteProdukte = new List<Produkt>();
+        ausleihen = new List<Ausleihe>();
     }
 
     public void ProduktHinzufügen(Produkt p)
@@ -123,6 +135,16 @@ class Buchung
     public List<Produkt> GetGekaufteProdukte()
     {
         return gekaufteProdukte;
+    }
+
+    public void NeueAusleihe(Ausleihe a)
+    {
+        ausleihen.Add(a);
+    }
+
+    public List<Ausleihe> GetAusleihen()
+    {
+        return ausleihen;
     }
 }
 
@@ -162,6 +184,7 @@ class Kunde
 class Shop
 {
     private List<Produkt> produkte;
+    private List<Fahrrad> fahrraeder;
 
     public Shop()
     {
@@ -178,11 +201,19 @@ class Shop
         produkte.Add(new Produkt("Campinggas", 2.00));
         produkte.Add(new Produkt("Limo", 1.00));
         produkte.Add(new Produkt("Limo", 1.00));
+
+        fahrraeder = new List<Fahrrad>();
+        fahrraeder.Add(new Fahrrad(1));
     }
 
     public List<Produkt> GetProdukte()
     {
         return produkte;
+    }
+
+    public List<Fahrrad> GetFahrräder()
+    {
+        return fahrraeder;
     }
 }
 
@@ -197,4 +228,31 @@ class Produkt
         Preis = preis;
     }
 
+}
+
+class Fahrrad
+{
+    public int Nummer { get; set; }
+
+    public Fahrrad(int nummer)
+    {
+        Nummer = nummer;
+    }
+}
+
+class Ausleihe
+{
+    public DateTime Start { get; set; }
+    public DateTime Ende { get; set; }
+    public Fahrrad Fahrrad { get; set; }
+
+    public double PreisProTag { get; set; }
+
+    public Ausleihe(DateTime start, DateTime ende, Fahrrad fahrrad)
+    {
+        PreisProTag = 2.5;
+        Start = start;
+        Ende = ende;
+        Fahrrad = fahrrad;
+    }
 }
