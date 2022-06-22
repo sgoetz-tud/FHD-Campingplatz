@@ -33,7 +33,7 @@
         Kunde kunde = new Kunde();
         Buchung b = kunde.buchen(cp, DateTime.Parse("01.07.2022"), DateTime.Parse("10.07.2022"), 303);
 
-        Console.WriteLine(b.Abreise - b.Anreise);
+        Console.WriteLine((b.Abreise - b.Anreise).Days+" Tage");
     }
 }
 
