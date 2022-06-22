@@ -35,15 +35,20 @@
     {
         int days = (b.Abreise - b.Anreise).Days;
         double preis = days * b.Stellplatz.Preis;
+
+        Console.WriteLine("Stellplatzgebühr: "+preis);
         
         foreach(Produkt p in b.GetGekaufteProdukte())
         {
             preis += p.Preis;
+            Console.WriteLine("+"+p.Preis+" ("+p.Name+")");
         }
 
         foreach(Ausleihe a in b.GetAusleihen())
         {
-            preis += (a.Ende - a.Start).Days * a.PreisProTag;
+            double leihpreis = (a.Ende - a.Start).Days * a.PreisProTag;
+            preis += leihpreis;
+            Console.WriteLine("+"+leihpreis+" für Fahrrad-Ausleihe von "+(a.Ende-a.Start).Days+" Tagen");
         }
 
         return preis;
@@ -60,6 +65,7 @@
             if(p.Name == "Brötchen")
             {
                 kunde.KaufeProdukt(p, 303);
+                break;
             }
         }
 
